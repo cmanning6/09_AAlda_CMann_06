@@ -1,5 +1,15 @@
+/**
+* Authors: Chad Manning, Abraham Aldana
+* Instrucor: Dr. Wang
+* Course: CMPS 3390
+* Created: March 19th, 2019
+* Source: DiningPhilosopher.java
+*/
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DiningPhilosopher extends JFrame
 {
@@ -67,13 +77,27 @@ class Philosopher extends Thread
             PhilosopherUtil.forkIsOnTable[rightFork] = false;
             PhilosopherUtil.forkIsOnTable[leftFork] = false;
             state = "EATING";
+	    eat();
          }
+   }
+   
+   private void eat() {
+      // after 5 seconds, put forks down
+      Timer timer = new Timer();
+      timer.schedule(new TimerTask() {
+         // @Override
+         public void run() {
+            PhilosopherUtil.forkIsOnTable[rightFork] = true;
+            PhilosopherUtil.forkIsOnTable[leftFork] = true;
+            state = "THINKING";
+         }
+      }, 5000);
    }
 
    public void run () {
       while (true) {
          PhilosopherUtil.simulate(id, state, g);
-         if (state == "HUNGRY") {
+         if (state == "THINKING") {
             getForks();
          }
       }
